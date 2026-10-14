@@ -6,96 +6,190 @@
 <title>ゆうせい ひらがなクエスト</title>
 
 <style>
-body{
-  margin:0;
-  padding:16px;
-  font-family:sans-serif;
-  background:#eafaf6;
-  color:#263238;
+* {
+  box-sizing: border-box;
 }
-main{
-  max-width:650px;
-  margin:auto;
+
+body {
+  margin: 0;
+  padding: 14px;
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif;
+  background: linear-gradient(160deg, #e7faf6, #fff7e7);
+  color: #263238;
 }
-h1{
-  text-align:center;
-  color:#138b7c;
+
+main {
+  max-width: 650px;
+  margin: auto;
 }
-#card{
-  height:260px;
-  background:white;
-  border:5px solid #55c6b7;
-  border-radius:30px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:160px;
-  font-weight:bold;
-  margin:20px 0;
+
+h1 {
+  margin: 8px 0 5px;
+  text-align: center;
+  color: #138b7c;
+  font-size: 30px;
 }
-#next{
-  width:100%;
-  border:0;
-  border-radius:20px;
-  padding:20px;
-  background:#ff8055;
-  color:white;
-  font-size:24px;
-  font-weight:bold;
+
+.subtitle {
+  text-align: center;
+  color: #607d8b;
+  margin-bottom: 15px;
 }
-section{
-  background:white;
-  margin-top:22px;
-  padding:16px;
-  border-radius:20px;
+
+#card {
+  height: 260px;
+  background: white;
+  border: 5px solid #55c6b7;
+  border-radius: 30px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 150px;
+  font-weight: bold;
+
+  margin: 18px 0;
 }
-.rows{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:8px;
+
+#next {
+  width: 100%;
+  border: none;
+  border-radius: 20px;
+  padding: 20px;
+
+  background: #ff8055;
+  color: white;
+
+  font-size: 24px;
+  font-weight: bold;
+
+  box-shadow: 0 5px 0 #d45f38;
 }
-input{
-  display:none;
+
+#next:active {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 #d45f38;
 }
-label{
-  display:block;
-  padding:12px 2px;
-  border:2px solid #ddd;
-  border-radius:12px;
-  text-align:center;
-  font-weight:bold;
+
+section {
+  background: white;
+  margin-top: 22px;
+  padding: 16px;
+  border-radius: 20px;
 }
-input:checked + label{
-  background:#cffff5;
-  border-color:#39b7a6;
-  color:#08796c;
+
+.title {
+  font-weight: bold;
+  margin-bottom: 12px;
 }
-#info{
-  text-align:center;
-  margin-top:15px;
-  color:#607d8b;
+
+.rows {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+
+input {
+  display: none;
+}
+
+label {
+  display: block;
+  padding: 12px 2px;
+
+  border: 2px solid #dddddd;
+  border-radius: 12px;
+
+  text-align: center;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+input:checked + label {
+  background: #cffff5;
+  border-color: #39b7a6;
+  color: #08796c;
+}
+
+#info {
+  text-align: center;
+  margin-top: 16px;
+
+  color: #607d8b;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+#rounds {
+  text-align: center;
+  margin-top: 8px;
+  color: #138b7c;
+  font-weight: bold;
+}
+
+.reset {
+  width: 100%;
+  margin-top: 14px;
+  padding: 10px;
+
+  border: none;
+  border-radius: 12px;
+
+  background: #eef5f6;
+  color: #607d8b;
+  font-weight: bold;
 }
 </style>
 </head>
 
 <body>
+
 <main>
 
-<h1>ゆうせい<br>ひらがなクエスト</h1>
+<h1>
+  ゆうせい<br>
+  ひらがなクエスト
+</h1>
+
+<div class="subtitle">
+  でてきた ひらがなを よんでみよう！
+</div>
 
 <div id="card">？</div>
 
-<button id="next">🎲 つぎの ひらがな！</button>
+<button id="next">
+  🎲 つぎの ひらがな！
+</button>
 
 <section>
-  <b>でてくる「行」をえらぶ</b>
+
+  <div class="title">
+    でてくる「行」をえらぶ
+  </div>
+
   <div class="rows" id="rows"></div>
-  <div id="info">あ行 ON ・ 0もん</div>
+
+  <div id="info">
+    1しゅうめ
+  </div>
+
+  <div id="rounds">
+    クリア：0しゅう
+  </div>
+
+  <button class="reset" id="reset">
+    はじめから
+  </button>
+
 </section>
 
 </main>
 
+
 <script>
+
 const kana = {
   "あ行":"あいうえお",
   "か行":"かきくけこ",
@@ -110,38 +204,262 @@ const kana = {
 };
 
 const rows = document.getElementById("rows");
-let count = 0;
-let last = "";
+const card = document.getElementById("card");
+const info = document.getElementById("info");
+const rounds = document.getElementById("rounds");
+const nextButton = document.getElementById("next");
+const resetButton = document.getElementById("reset");
 
-Object.keys(kana).forEach((name,i)=>{
-  rows.innerHTML +=
-  '<div><input type="checkbox" id="r'+i+'" value="'+name+'" '+(i===0?'checked':'')+'>'+
-  '<label for="r'+i+'">'+name+'</label></div>';
-});
+let currentRound = 1;
+let completedRounds = 0;
 
-document.getElementById("next").onclick = function(){
-  const selected = [...document.querySelectorAll("input:checked")];
+let remaining = [];
+let answered = 0;
 
-  if(selected.length===0){
-    alert("ひとつ えらんでね！");
-    return;
+let selectionKey = "";
+
+
+/* 行ボタンを作る */
+
+Object.keys(kana).forEach(function(name, index) {
+
+  const wrapper = document.createElement("div");
+
+  const input = document.createElement("input");
+
+  input.type = "checkbox";
+  input.id = "row" + index;
+  input.value = name;
+
+  if (index === 0) {
+    input.checked = true;
   }
 
-  let pool = "";
-  selected.forEach(x => pool += kana[x.value]);
+  const label = document.createElement("label");
 
-  let choice;
-  do{
-    choice = pool[Math.floor(Math.random()*pool.length)];
-  }while(pool.length>1 && choice===last);
+  label.htmlFor = input.id;
+  label.textContent = name;
 
-  last = choice;
-  count++;
+  wrapper.appendChild(input);
+  wrapper.appendChild(label);
 
-  document.getElementById("card").textContent = choice;
-  document.getElementById("info").textContent =
-    selected.length+"ぎょう ON ・ "+count+"もん";
-};
+  rows.appendChild(wrapper);
+
+});
+
+
+/* 選択されている行 */
+
+function getSelectedNames() {
+
+  return Array.from(
+    document.querySelectorAll("input:checked")
+  ).map(function(input) {
+
+    return input.value;
+
+  });
+
+}
+
+
+/* シャッフル */
+
+function shuffle(array) {
+
+  for (
+    let i = array.length - 1;
+    i > 0;
+    i--
+  ) {
+
+    const j =
+      Math.floor(
+        Math.random() * (i + 1)
+      );
+
+    const temp = array[i];
+
+    array[i] = array[j];
+    array[j] = temp;
+
+  }
+
+  return array;
+
+}
+
+
+/* 新しい1周を準備 */
+
+function prepareRound(names) {
+
+  let characters = [];
+
+  names.forEach(function(name) {
+
+    characters =
+      characters.concat(
+        Array.from(kana[name])
+      );
+
+  });
+
+  remaining = shuffle(characters);
+
+  answered = 0;
+
+  selectionKey = names.join("|");
+
+}
+
+
+/* 最初から */
+
+function restart() {
+
+  currentRound = 1;
+  completedRounds = 0;
+
+  remaining = [];
+  answered = 0;
+  selectionKey = "";
+
+  card.textContent = "？";
+
+  info.textContent =
+    "1しゅうめ";
+
+  rounds.textContent =
+    "クリア：0しゅう";
+
+}
+
+
+/* 行を変えたらリセット */
+
+rows.addEventListener(
+  "change",
+  function() {
+
+    restart();
+
+  }
+);
+
+
+/* 次の文字 */
+
+nextButton.addEventListener(
+  "click",
+  function() {
+
+    const names =
+      getSelectedNames();
+
+
+    /* 何も選ばれていない */
+
+    if (names.length === 0) {
+
+      alert(
+        "ひとついじょう「行」をえらんでね！"
+      );
+
+      return;
+
+    }
+
+
+    const newSelectionKey =
+      names.join("|");
+
+
+    /* 選択内容が変わった場合 */
+
+    if (
+      newSelectionKey !== selectionKey
+    ) {
+
+      currentRound = 1;
+      completedRounds = 0;
+
+      prepareRound(names);
+
+    }
+
+
+    /* その周を全部出し終わった */
+
+    if (
+      remaining.length === 0 &&
+      answered > 0
+    ) {
+
+      completedRounds++;
+
+      card.textContent = "🎉";
+
+      info.textContent =
+        currentRound +
+        "しゅう クリア！";
+
+      rounds.textContent =
+        "クリア：" +
+        completedRounds +
+        "しゅう";
+
+      currentRound++;
+
+      prepareRound(names);
+
+      return;
+
+    }
+
+
+    /* 最初の問題を準備 */
+
+    if (remaining.length === 0) {
+
+      prepareRound(names);
+
+    }
+
+
+    /* 未出題の文字を1文字取り出す */
+
+    const character =
+      remaining.pop();
+
+    answered++;
+
+    card.textContent =
+      character;
+
+    info.textContent =
+      currentRound +
+      "しゅうめ　" +
+      answered +
+      "もんめ　あと" +
+      remaining.length +
+      "もじ";
+
+  }
+);
+
+
+/* はじめからボタン */
+
+resetButton.addEventListener(
+  "click",
+  function() {
+
+    restart();
+
+  }
+);
+
 </script>
 
 </body>
